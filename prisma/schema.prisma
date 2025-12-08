@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String?  @unique
+  phone     String?  @unique
+  name      String
+  password  String
+  role      Role     @default(CUSTOMER)
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([phone])
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  description String      @db.Text
+  longDesc    String?     @db.Text
+  price       Int
+  imageUrl    String?
+  fileUrl     String?
+  fileSize    String?
+  category    Category
+  featured    Boolean     @default(false)
+  active      Boolean     @default(true)
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([slug])
+  @@index([category])
+  @@index([featured])
+}
+
+enum Category {
+  COURSE
+  EBOOK
+  BUNDLE
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+  totalAmount     Int
+  status          OrderStatus @default(PENDING)
+  stripeSessionId String?     @unique
+  influencerCode  String?
+  influencer      Influencer? @relation(fields: [influencerCode], references: [code])
+  items           OrderItem[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([influencerCode])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  price     Int
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Influencer {
+  id         String   @id @default(cuid())
+  code       String   @unique
+  name       String
+  email      String
+  commission Int      @default(50)
+  active     Boolean  @default(true)
+  orders     Order[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([code])
+  @@index([active])
+}
+
+model DownloadLog {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([productId])
+  @@index([createdAt])
+}
