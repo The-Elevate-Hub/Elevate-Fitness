@@ -1,0 +1,4 @@
+node_modules
+.next
+fls.txt
+.env.local
