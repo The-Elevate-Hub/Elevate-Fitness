@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Category } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -25,10 +25,10 @@ async function main() {
     {
       name: 'Complete Fitness Mastery Course',
       slug: 'complete-fitness-mastery-course',
-      description: 'Transform your body and mind with our comprehensive fitness program',
+      description: 'Coming Soon',
       longDesc: 'A complete fitness transformation program designed by experts. Includes workout plans, nutrition guides, and mental wellness training. Perfect for beginners and advanced fitness enthusiasts.',
-      price: 9700,
-      category: 'COURSE',
+      price: 35,
+      category: 'COURSE' as Category,
       featured: true,
       fileSize: '2.5 GB',
     },
@@ -37,8 +37,8 @@ async function main() {
       slug: 'home-workout-blueprint-ebook',
       description: 'Your complete guide to effective home workouts with no equipment needed',
       longDesc: 'Master the art of working out at home with our detailed 200-page guide. Includes exercises, meal plans, and productivity templates to keep you on track.',
-      price: 4700,
-      category: 'EBOOK',
+      price: 38,
+      category: 'EBOOK' as Category,
       featured: true,
       fileSize: '15 MB',
     },
@@ -47,8 +47,8 @@ async function main() {
       slug: 'fitness-health-ebook',
       description: 'Evidence-based nutrition and wellness guide for optimal health',
       longDesc: 'Comprehensive guide covering nutrition science, meal planning, supplements, recovery strategies, and lifestyle optimization. Backed by latest research.',
-      price: 4700,
-      category: 'EBOOK',
+      price: 38,
+      category: 'EBOOK' as Category,
       featured: false,
       fileSize: '18 MB',
     },
