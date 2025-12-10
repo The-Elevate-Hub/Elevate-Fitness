@@ -10,10 +10,6 @@ import Link from 'next/link';
 
 export const revalidate = 3600;
 
-interface ProductPageProps {
-  params: { slug: string };
-}
-
 async function getProduct(slug: string) {
   return db.product.findUnique({
     where: { slug },
@@ -36,8 +32,13 @@ async function checkIfUserOwnedProduct(userId: string, productId: string) {
   return !!order;
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
-  const product = await getProduct(params.slug);
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const product = await getProduct(slug);
 
   if (!product || !product.active) {
     notFound();

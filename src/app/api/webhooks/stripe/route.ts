@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { db } from '@/lib/db';
-import { constructWebhookEvent } from '@/lib/stripe';
+import { constructStripeWebhookEvent } from '@/lib/stripe';
 import { sendOrderConfirmation } from '@/lib/email';
 import { generateOrderNumber } from '@/lib/utils';
 
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const event = await constructWebhookEvent(body, signature);
+    const event = await constructStripeWebhookEvent(body, signature);
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as any;

@@ -1,6 +1,7 @@
 node_modules
 node_modules/
 .next
+.next/
 fls.txt
 .env.local
 Docs/
