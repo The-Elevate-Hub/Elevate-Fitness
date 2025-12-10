@@ -95,7 +95,7 @@ export async function sendOrderConfirmation(data: OrderConfirmationData) {
               Questions? Contact us at <a href="mailto:support@elevate-fitness.com" style="color: #B8860B; text-decoration: none;">support@elevate-fitness.com</a>
             </p>
             <p style="color: #666; font-size: 12px; margin: 16px 0 0 0;">
-              © ${new Date().getFullYear()} Elevate Fitness. All rights reserved.
+              © ${new Date().getFullYear()} Elevate. All rights reserved.
             </p>
           </div>
         </div>
