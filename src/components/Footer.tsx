@@ -24,7 +24,7 @@ export function Footer() {
     { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
     { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
     { icon: Youtube, href: 'https://youtube.com', label: 'YouTube' },
-    { icon: Mail, href: 'mailto:support@elevate-fitness.com', label: 'Email' },
+    { icon: Mail, href: 'mailto:elevate871@gmail.com', label: 'Email' },
   ];
 
   return (

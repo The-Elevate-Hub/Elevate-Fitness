@@ -1,19 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
-import { createCheckoutSession } from '@/lib/stripe';
+import { createStripeCheckoutSession, createPayPalOrder } from '@/lib/stripe';
 import { z } from 'zod';
 
 const checkoutSchema = z.object({
   productIds: z.array(z.string()).min(1),
   influencerCode: z.string().optional(),
+  paymentMethod: z.enum(['stripe', 'paypal']).default('stripe'),
 });
 
 export async function POST(request: NextRequest) {
   try {
     const session = await requireAuth();
     const body = await request.json();
-    const { productIds, influencerCode } = checkoutSchema.parse(body);
+    const { productIds, influencerCode, paymentMethod } = checkoutSchema.parse(body);
 
     const products = await db.product.findMany({
       where: {
@@ -60,26 +61,52 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    const stripeSession = await createCheckoutSession({
-      userId: session.userId,
-      email: session.email || '',
-      items: products.map((p) => ({
-        productId: p.id,
-        name: p.name,
-        price: p.price,
-      })),
-      influencerCode: influencer?.code,
-    });
+    if (paymentMethod === 'paypal') {
+      const paypalOrder = await createPayPalOrder({
+        userId: session.userId,
+        items: products.map((p) => ({
+          productId: p.id,
+          name: p.name,
+          price: p.price,
+        })),
+        influencerCode: influencer?.code,
+      });
 
-    await db.order.update({
-      where: { id: order.id },
-      data: { stripeSessionId: stripeSession.id },
-    });
+      await db.order.update({
+        where: { id: order.id },
+        data: { stripeSessionId: paypalOrder.id },
+      });
 
-    return NextResponse.json({
-      sessionId: stripeSession.id,
-      url: stripeSession.url,
-    });
+      const approvalUrl = paypalOrder.links?.find((link: any) => link.rel === 'approve')?.href;
+
+      return NextResponse.json({
+        orderId: paypalOrder.id,
+        url: approvalUrl,
+        method: 'paypal',
+      });
+    } else {
+      const stripeSession = await createStripeCheckoutSession({
+        userId: session.userId,
+        email: session.email || '',
+        items: products.map((p) => ({
+          productId: p.id,
+          name: p.name,
+          price: p.price,
+        })),
+        influencerCode: influencer?.code,
+      });
+
+      await db.order.update({
+        where: { id: order.id },
+        data: { stripeSessionId: stripeSession.id },
+      });
+
+      return NextResponse.json({
+        sessionId: stripeSession.id,
+        url: stripeSession.url,
+        method: 'stripe',
+      });
+    }
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(

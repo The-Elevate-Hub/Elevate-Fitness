@@ -92,7 +92,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-2xl font-serif font-bold mb-4 text-foreground">10. Contact Us</h2>
             <p className="text-muted-foreground leading-relaxed">
-              If you have any questions about this Privacy Policy, please contact us at support@elevate-fitness.com
+              If you have any questions about this Privacy Policy, please contact us at elevate871@gmail.com
             </p>
           </section>
         </div>

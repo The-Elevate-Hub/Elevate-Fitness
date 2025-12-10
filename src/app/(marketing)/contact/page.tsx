@@ -72,10 +72,10 @@ export default function ContactPage() {
               </CardHeader>
               <CardContent>
                 <a
-                  href="mailto:support@elevate-fitness.com"
+                  href="mailto:elevate871@gmail.com"
                   className="text-accent hover:underline"
                 >
-                  support@elevate-fitness.com
+                  elevate871@gmail.com
                 </a>
               </CardContent>
             </Card>

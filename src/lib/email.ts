@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const fromEmail = process.env.RESEND_FROM_EMAIL || 'orders@elevate-fitness.com';
+const fromEmail = process.env.RESEND_FROM_EMAIL || 'elevate871@gmail.com';
 
 interface OrderConfirmationData {
   name: string;
@@ -92,7 +92,7 @@ export async function sendOrderConfirmation(data: OrderConfirmationData) {
           
           <div style="text-align: center; margin-top: 40px; padding-top: 32px; border-top: 1px solid #2A2A2A;">
             <p style="color: #A0A0A0; font-size: 14px; margin: 0;">
-              Questions? Contact us at <a href="mailto:support@elevate-fitness.com" style="color: #B8860B; text-decoration: none;">support@elevate-fitness.com</a>
+              Questions? Contact us at <a href="mailto:elevate871@gmail.com" style="color: #B8860B; text-decoration: none;">elevate871@gmail.com</a>
             </p>
             <p style="color: #666; font-size: 12px; margin: 16px 0 0 0;">
               © ${new Date().getFullYear()} Elevate. All rights reserved.
@@ -143,7 +143,7 @@ export async function sendContactFormEmail(data: ContactFormData) {
   try {
     await resend.emails.send({
       from: `Elevate Contact Form <${fromEmail}>`,
-      to: process.env.ADMIN_EMAIL || 'hemansh@elevate-fitness.com',
+      to: process.env.ADMIN_EMAIL || 'elevate871@gmail.com',
       replyTo: data.email,
       subject: `Contact Form: ${data.name}`,
       html,
