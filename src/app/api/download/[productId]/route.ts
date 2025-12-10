@@ -4,13 +4,14 @@ import { requireAuth } from '@/lib/auth';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { productId: string } }
+  { params }: { params: Promise<{ productId: string }> }
 ) {
   try {
     const session = await requireAuth();
+    const { productId } = await params;
 
     const product = await db.product.findUnique({
-      where: { id: params.productId },
+      where: { id: productId },
     });
 
     if (!product) {
@@ -26,7 +27,7 @@ export async function GET(
         status: 'COMPLETED',
         items: {
           some: {
-            productId: params.productId,
+            productId,
           },
         },
       },
@@ -46,7 +47,7 @@ export async function GET(
     await db.downloadLog.create({
       data: {
         userId: session.userId,
-        productId: params.productId,
+        productId,
         ipAddress,
         userAgent,
       },

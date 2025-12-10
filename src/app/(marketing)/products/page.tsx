@@ -5,10 +5,6 @@ import { Category } from '@prisma/client';
 
 export const revalidate = 3600;
 
-interface ProductsPageProps {
-  searchParams: { category?: string };
-}
-
 async function getProducts(category?: string) {
   const where: any = { active: true };
 
@@ -25,8 +21,13 @@ async function getProducts(category?: string) {
   });
 }
 
-export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-  const products = await getProducts(searchParams.category);
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const { category } = await searchParams;
+  const products = await getProducts(category);
 
   const categories = [
     { label: 'All Products', value: '' },
@@ -35,7 +36,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     { label: 'Bundles', value: 'bundle' },
   ];
 
-  const activeCategory = searchParams.category || '';
+  const activeCategory = category || '';
 
   return (
     <div className="min-h-screen bg-background pt-32 pb-24">
@@ -50,16 +51,16 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         </div>
 
         <div className="flex flex-wrap gap-3 justify-center mb-12">
-          {categories.map((category) => (
+          {categories.map((cat) => (
             <a
-              key={category.value}
-              href={category.value ? `/products?category=${category.value}` : '/products'}
+              key={cat.value}
+              href={cat.value ? `/products?category=${cat.value}` : '/products'}
             >
               <Button
-                variant={activeCategory === category.value ? 'luxury' : 'outline'}
+                variant={activeCategory === cat.value ? 'luxury' : 'outline'}
                 size="sm"
               >
-                {category.label}
+                {cat.label}
               </Button>
             </a>
           ))}
