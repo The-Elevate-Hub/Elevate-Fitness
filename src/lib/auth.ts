@@ -66,7 +66,8 @@ export async function getSessionFromRequest(request: NextRequest): Promise<Sessi
 
   try {
     const verified = await jwtVerify(token, secret);
-    return verified.payload as SessionData;
+    const payload = verified.payload as unknown as SessionData;
+    return payload;
   } catch {
     return null;
   }
