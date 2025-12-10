@@ -63,7 +63,7 @@ export async function sendOrderConfirmation(data: OrderConfirmationData) {
             
             <p style="color: #A0A0A0; line-height: 1.6;">
               Hi ${data.name},<br/><br/>
-              Thank you for your purchase! Your order has been confirmed and your digital products are ready for download.
+              Thank you for your purchase! Your order has been confirmed and your products are ready for download.
             </p>
             
             <div style="margin: 32px 0; padding: 24px; background: #0A0A0A; border-radius: 4px;">

@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+// @ts-ignore - PayPal SDK doesn't have TypeScript definitions
 import paypal from '@paypal/checkout-server-sdk';
 
 // ==================== STRIPE ====================
