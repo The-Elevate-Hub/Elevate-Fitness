@@ -10,12 +10,13 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, ArrowLeft, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function EditProductPage({ params }: { params: { id: string } }) {
+export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [productId, setProductId] = useState<string>('');
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -30,32 +31,35 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   });
 
   useEffect(() => {
-    fetch(`/api/products/${params.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setFormData({
-          name: data.name,
-          description: data.description,
-          longDesc: data.longDesc || '',
-          price: (data.price / 100).toFixed(2),
-          category: data.category,
-          featured: data.featured,
-          active: data.active,
-          imageUrl: data.imageUrl || '',
-          fileUrl: data.fileUrl || '',
-          fileSize: data.fileSize || '',
+    params.then(({ id }) => {
+      setProductId(id);
+      fetch(`/api/products/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setFormData({
+            name: data.name,
+            description: data.description,
+            longDesc: data.longDesc || '',
+            price: (data.price / 100).toFixed(2),
+            category: data.category,
+            featured: data.featured,
+            active: data.active,
+            imageUrl: data.imageUrl || '',
+            fileUrl: data.fileUrl || '',
+            fileSize: data.fileSize || '',
+          });
+          setIsLoadingData(false);
+        })
+        .catch(() => {
+          toast({
+            title: 'Error',
+            description: 'Failed to load product',
+            variant: 'destructive',
+          });
+          router.push('/admin/products');
         });
-        setIsLoadingData(false);
-      })
-      .catch(() => {
-        toast({
-          title: 'Error',
-          description: 'Failed to load product',
-          variant: 'destructive',
-        });
-        router.push('/admin/products');
-      });
-  }, [params.id, router, toast]);
+    });
+  }, [params, router, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +72,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         throw new Error('Please enter a valid price');
       }
 
-      const res = await fetch(`/api/products/${params.id}`, {
+      const res = await fetch(`/api/products/${productId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -112,7 +116,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     setIsDeleting(true);
 
     try {
-      const res = await fetch(`/api/products/${params.id}`, {
+      const res = await fetch(`/api/products/${productId}`, {
         method: 'DELETE',
       });
 
