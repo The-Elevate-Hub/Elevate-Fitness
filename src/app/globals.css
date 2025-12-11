@@ -7,6 +7,14 @@
 :root {
   --font-cormorant: 'Cormorant Garamond', serif;
   --font-inter: 'Inter', sans-serif;
+  --cursor-noble-primary: #B8860B;
+  --cursor-noble-glow: rgba(184, 134, 11, 0.5);
+  --cursor-noble-shadow: rgba(184, 134, 11, 0.3);
+  --cursor-size-default: 30px;
+  --cursor-transition-fast: 0.15s;
+  --cursor-transition-normal: 0.3s;
+  --cursor-smooth-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --cursor-spring-tension: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @layer base {
@@ -107,5 +115,157 @@ input[type="number"] {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =============================================================================
+   CUSTOM NOBLE CURSOR SYSTEM
+   ============================================================================= */
+
+* {
+  cursor: none !important;
+}
+
+body {
+  cursor: none !important;
+}
+
+/* Cursor container for all custom cursors */
+.cursor-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 999999;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Default Noble Cursor Dot */
+.conclave-cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--cursor-noble-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999999;
+  transform: translate(-50%, -50%);
+  transition: all var(--cursor-transition-fast) var(--cursor-smooth-ease);
+  box-shadow: 
+    0 0 10px var(--cursor-noble-glow),
+    0 0 20px var(--cursor-noble-shadow),
+    inset 0 0 5px rgba(255, 255, 255, 0.3);
+  will-change: transform, opacity;
+}
+
+/* Default Noble Cursor Ring */
+.conclave-cursor-ring {
+  position: fixed;
+  width: var(--cursor-size-default);
+  height: var(--cursor-size-default);
+  border: 2px solid var(--cursor-noble-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999998;
+  transform: translate(-50%, -50%);
+  transition: all var(--cursor-transition-normal) var(--cursor-spring-tension);
+  box-shadow: 
+    0 0 15px var(--cursor-noble-glow),
+    0 0 30px var(--cursor-noble-shadow),
+    inset 0 0 10px rgba(255, 215, 0, 0.1);
+  will-change: transform, width, height;
+}
+
+/* Default Hover State */
+.conclave-cursor-ring.hover {
+  width: 50px;
+  height: 50px;
+  border-width: 3px;
+  box-shadow: 
+    0 0 25px var(--cursor-noble-glow),
+    0 0 50px var(--cursor-noble-shadow),
+    0 0 75px rgba(255, 215, 0, 0.2);
+  animation: nobleHoverPulse 2s ease-in-out infinite;
+}
+
+.conclave-cursor-dot.hover {
+  width: 4px;
+  height: 4px;
+  background: #F8F8FF;
+  box-shadow: 
+    0 0 15px rgba(248, 248, 255, 0.8),
+    0 0 30px var(--cursor-noble-glow);
+}
+
+/* Text Cursor State */
+.conclave-cursor-ring.text {
+  width: 3px;
+  height: 30px;
+  border-radius: 2px;
+  border-width: 1px;
+  animation: textCursorBlink 1.2s ease-in-out infinite;
+}
+
+.conclave-cursor-dot.text {
+  display: none;
+}
+
+/* Loading State */
+.conclave-cursor-ring.loading {
+  border: 3px solid transparent;
+  border-top: 3px solid var(--cursor-noble-primary);
+  border-right: 3px solid var(--cursor-noble-primary);
+  animation: loadingSpin 1s linear infinite;
+  box-shadow: 
+    0 0 20px var(--cursor-noble-glow),
+    0 0 40px var(--cursor-noble-shadow);
+}
+
+.conclave-cursor-dot.loading {
+  animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+/* Noble Default Animations */
+@keyframes nobleHoverPulse {
+  0%, 100% { 
+    box-shadow: 
+      0 0 25px var(--cursor-noble-glow),
+      0 0 50px var(--cursor-noble-shadow),
+      0 0 75px rgba(255, 215, 0, 0.2);
+  }
+  50% { 
+    box-shadow: 
+      0 0 35px var(--cursor-noble-glow),
+      0 0 70px var(--cursor-noble-shadow),
+      0 0 100px rgba(255, 215, 0, 0.4);
+  }
+}
+
+@keyframes textCursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+@keyframes loadingSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes loadingPulse {
+  0%, 100% { 
+    transform: scale(1); 
+    box-shadow: 0 0 10px var(--cursor-noble-glow);
+  }
+  50% { 
+    transform: scale(1.4); 
+    box-shadow: 0 0 20px var(--cursor-noble-glow), 0 0 40px var(--cursor-noble-shadow);
   }
 }

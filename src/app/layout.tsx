@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Cormorant_Garamond } from 'next/font/google';
 import './globals.css';
+import { CustomCursor } from '@/components/CustomCursor';
 import { Toaster } from '@/components/ui/toaster';
 import Script from 'next/script';
 
@@ -60,6 +61,8 @@ export default function RootLayout({
           </>
         )}
       </head>
+      {/* Custom Cursor */}
+      <CustomCursor />
       <body className="font-sans antialiased">
         {children}
         <Toaster />
