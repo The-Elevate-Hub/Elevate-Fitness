@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { db } from '@/lib/db';
 import Link from 'next/link';
 import { ArrowRight, Award, Clock, Download } from 'lucide-react';
+import { Suspense } from 'react';
 
 export const revalidate = 3600;
 
@@ -75,7 +76,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <Rotating3DModels />
+      {/* Temporarily disabled 3D models - uncomment after fixing Three.js SSR */}
+      {/* <Suspense fallback={<div className="h-[300vh] bg-background" />}>
+        <Rotating3DModels />
+      </Suspense> */}
 
       <section className="py-24 px-4 bg-background">
         <div className="max-w-7xl mx-auto">

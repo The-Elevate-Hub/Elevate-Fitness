@@ -1,5 +1,7 @@
 'use client';
 
+'use client';
+
 import { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
