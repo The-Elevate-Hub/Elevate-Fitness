@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
@@ -58,7 +56,7 @@ function WeightliftModel({ position, rotation, isActive }: ModelProps) {
 
 function TreadmillModel({ position, rotation, isActive }: ModelProps) {
   const meshRef = useRef<THREE.Group>(null);
-  const fbx = useLoader(FBXLoader, '/assets/models/3D/treadmill.fbx');
+  const gltf = useGLTF('/assets/models/3D/treadmill.glb');
 
   useFrame(() => {
     if (meshRef.current) {
@@ -70,7 +68,7 @@ function TreadmillModel({ position, rotation, isActive }: ModelProps) {
   return (
     <primitive
       ref={meshRef}
-      object={fbx.clone()}
+      object={gltf.scene.clone()}
       position={position}
       scale={isActive ? 0.012 : 0.01}
     />
@@ -200,5 +198,5 @@ export function Rotating3DModels() {
     </div>
   );
 }
-
+useGLTF.preload('/assets/models/3D/treadmill.glb')
 useGLTF.preload('/assets/models/3D/dumbell.glb');
