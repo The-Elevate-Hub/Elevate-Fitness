@@ -1,5 +1,4 @@
 import { Hero } from '@/components/Hero';
-import { Rotating3DModels } from '@/components/Rotating3DModels';
 import { ProductCard } from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { db } from '@/lib/db';
