@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Seeding database...');
 
-  const hashedAdminPassword = await bcrypt.hash('Elevateitall', 12);
+  const hashedAdminPassword = await bcrypt.hash('Elevatetall', 12);
   
   const admin = await prisma.user.upsert({
     where: { phone: '+99999999999' },
