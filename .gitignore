@@ -6,3 +6,5 @@ fls.txt
 .env.local
 Docs/
 .env
+.env.*
+.env.*.local

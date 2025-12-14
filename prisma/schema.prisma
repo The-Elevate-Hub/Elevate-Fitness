@@ -3,24 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl= env("DIRECT_URL")
-}
-
-model User {
-  id        String   @id @default(cuid())
-  email     String?  @unique
-  phone     String?  @unique
-  name      String
-  password  String
-  role      Role     @default(CUSTOMER)
-  orders    Order[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([email])
-  @@index([phone])
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -28,32 +13,57 @@ enum Role {
   ADMIN
 }
 
-model Product {
-  id          String      @id @default(cuid())
-  name        String
-  slug        String      @unique
-  description String      @db.Text
-  longDesc    String?     @db.Text
-  price       Int
-  imageUrl    String?
-  fileUrl     String?
-  fileSize    String?
-  category    Category
-  featured    Boolean     @default(false)
-  active      Boolean     @default(true)
-  orderItems  OrderItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-
-  @@index([slug])
-  @@index([category])
-  @@index([featured])
-}
-
 enum Category {
   COURSE
   EBOOK
   BUNDLE
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String?       @unique
+  phone        String?       @unique
+  name         String
+  password     String
+  role         Role          @default(CUSTOMER)
+  orders       Order[]
+  downloadLogs DownloadLog[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([email])
+  @@index([phone])
+}
+
+model Product {
+  id           String        @id @default(cuid())
+  name         String
+  slug         String        @unique
+  description  String        @db.Text
+  longDesc     String?       @db.Text
+  price        Int
+  imageUrl     String?
+  fileUrl      String?
+  fileSize     String?
+  category     Category
+  featured     Boolean       @default(false)
+  active       Boolean       @default(true)
+  orderItems   OrderItem[]
+  downloadLogs DownloadLog[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([slug])
+  @@index([category])
+  @@index([featured])
+  @@index([active])
 }
 
 model Order {
@@ -73,13 +83,6 @@ model Order {
   @@index([influencerCode])
   @@index([status])
   @@index([createdAt])
-}
-
-enum OrderStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  REFUNDED
 }
 
 model OrderItem {
@@ -113,7 +116,9 @@ model Influencer {
 model DownloadLog {
   id        String   @id @default(cuid())
   userId    String
+  user      User     @relation(fields: [userId], references: [id])
   productId String
+  product   Product  @relation(fields: [productId], references: [id])
   ipAddress String?
   userAgent String?
   createdAt DateTime @default(now())
