@@ -4,6 +4,7 @@ import './globals.css';
 import { CustomCursor } from '@/components/CustomCursor';
 import { Toaster } from '@/components/ui/toaster';
 import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -63,6 +64,8 @@ export default function RootLayout({
       </head>
       {/* Custom Cursor */}
       <CustomCursor />
+      {/* Vercel Analytics */}
+      <Analytics />
       <body className="font-sans antialiased">
         {children}
         <Toaster />

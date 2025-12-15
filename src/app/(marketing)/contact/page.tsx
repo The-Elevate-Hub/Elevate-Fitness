@@ -28,8 +28,10 @@ export default function ContactPage() {
         body: JSON.stringify(formData),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        throw new Error('Failed to send message');
+        throw new Error(data.error || 'Failed to send message');
       }
 
       toast({
@@ -38,10 +40,11 @@ export default function ContactPage() {
       });
 
       setFormData({ name: '', email: '', message: '' });
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Contact form error:', error);
       toast({
         title: 'Error',
-        description: 'Failed to send message. Please try again.',
+        description: error.message || 'Failed to send message. Please try emailing us directly at support@elevate-fitness.com',
         variant: 'destructive',
       });
     } finally {
@@ -72,10 +75,10 @@ export default function ContactPage() {
               </CardHeader>
               <CardContent>
                 <a
-                  href="mailto:elevate871@gmail.com"
+                  href="mailto:support@elevate-fitness.com"
                   className="text-accent hover:underline"
                 >
-                  elevate871@gmail.com
+                  support@elevate-fitness.com
                 </a>
               </CardContent>
             </Card>
