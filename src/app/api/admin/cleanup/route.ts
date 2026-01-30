@@ -245,10 +245,10 @@ export async function POST(request: NextRequest) {
       ],
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Cleanup error:', error);
     return NextResponse.json(
-      { error: 'Cleanup failed', message: error.message },
+      { error: 'Cleanup failed', message: error?.message || 'Unknown error' },
       { status: 500 }
     );
   }
